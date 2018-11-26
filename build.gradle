@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'application'
 apply plugin: 'java'
 
-mainClassName = 'main/java/main/Controller'
+mainClassName = 'main.java.main.Controller'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -59,12 +59,18 @@ dependencies {
 	compile ('junit:junit:4.12')
 }
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'main.java.main.Controller'
-    }
-    baseName = 'jshawcroDP'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+run{
+    standardInput = System.in
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'main.java.main.Controller'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+ }
 

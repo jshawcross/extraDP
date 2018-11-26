@@ -24,12 +24,8 @@ public class Controller {
         Scanner input = new Scanner(System.in, "UTF-8");
         String command;
         
-        // to do: add naming apiary
-        
         help();
-        
-        
-        
+
         while (!end) {
             System.out.print("Enter command: ");
             command = input.nextLine();
@@ -127,7 +123,8 @@ public class Controller {
                     System.out.println("invalid bee type, valid types:");
                     System.out.println("honey, killer, carpenter, bumble, super, tiny");
                 }
-                
+            } catch (RuntimeException ex) {
+                throw ex;
             } catch (Exception ex) {
                 System.out.println("invalid parameters for 'spawn' command, please use:");
                 System.out.println("spawn <x location> <y location> <bee type>");
@@ -196,6 +193,8 @@ public class Controller {
                         System.out.println("worker, warrior, drone, food, egg");
                     }
                 }
+            } catch (RuntimeException ex) {
+                throw ex;
             } catch (Exception ex) {
                 System.out.println("invalid parameters for 'give' command, please use:");
                 System.out.println("give <hive id> <resource> <amount>");
@@ -243,6 +242,8 @@ public class Controller {
                     System.out.println("invalid parameters for 'summary' command, please use:");
                     System.out.println("list <hives> or list <bees>");
                 }
+            } catch (RuntimeException ex) {
+                throw ex;
             } catch (Exception ex) {
                 System.out.println("einvalid parameters for 'summary' command, please use:");
                 System.out.println("summary <hive> <hive id> or summary <bees> <bee id>");
