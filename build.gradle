@@ -1,0 +1,70 @@
+plugins {
+	id  'com.github.spotbugs' version '1.6.5'
+}
+
+apply plugin: 'application'
+apply plugin: 'java'
+
+mainClassName = 'main/java/main/Controller'
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+	mavenCentral()
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Configure Checkstyle
+///////////////////////////////////////////////////////////////////////////
+apply plugin: 'checkstyle'
+checkstyle {
+  ignoreFailures = true
+  showViolations = false
+}
+
+tasks.withType(Checkstyle) {
+  reports {
+    html.enabled = true
+    xml.enabled = false
+  }
+}
+
+checkstyle {
+    toolVersion = "8.8"
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Configure SpotBugs
+///////////////////////////////////////////////////////////////////////////
+
+// The part below needs to be included for Spotbugs
+spotbugs {
+	toolVersion = '3.1.1'
+	ignoreFailures = true
+}
+
+// // To generate an HTML report instead of XML
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+
+test {
+	useJUnit()
+}
+
+dependencies {
+	compile ('junit:junit:4.12')
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'main.java.main.Controller'
+    }
+    baseName = 'jshawcroDP'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
