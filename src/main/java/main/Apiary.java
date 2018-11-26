@@ -109,13 +109,17 @@ public class Apiary {
      */
     public BeeHive getBeeHive(int input) {
         BeeHive output =  new BeeHive.BeeHiveBuilder(0, 0, 0).build();
+        boolean found = false;
         
         for (int i = 0; i < hives.size(); i++) {
             if (hives.elementAt(i).getId() == input) {
                 output = hives.elementAt(i);
-            } else {
-                output = null;
+                found = true;
             }
+        }
+        
+        if (!found) {
+            output = null;
         }
         
         return output;
@@ -132,7 +136,7 @@ public class Apiary {
         outBuffer.append("Current Beehives:\n");
         
         for (int i = 0; i < hives.size(); i++) {
-            outBuffer.append(hives.elementAt(i).toStringId() + "\n");
+            outBuffer.append(hives.elementAt(i).toString() + "\n");
         }
         
         String output = outBuffer.toString();

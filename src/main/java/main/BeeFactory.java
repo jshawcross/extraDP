@@ -1,6 +1,6 @@
 package main.java.main;
 
-import main.java.main.Bee.BeeSpeciesF;
+import main.java.main.BeeHive.BeeSpecies;
 
 /**
  * Factory class to create bees of different types.
@@ -20,7 +20,7 @@ public class BeeFactory {
      * @return
      */
     public static Bee getBee(String inputType, int inputId, 
-                int inputHiveId, BeeSpeciesF inputSpecies) {
+                int inputHiveId, BeeSpecies inputSpecies) {
         if  (inputType.equals("Queen")) {
             return new Queen(inputId, inputHiveId, inputSpecies);
         } else if  (inputType.equals("Worker")) {

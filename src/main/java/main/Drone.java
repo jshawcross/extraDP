@@ -2,6 +2,8 @@ package main.java.main;
 
 import java.util.Random;
 
+import main.java.main.BeeHive.BeeSpecies;
+
 /**
  * Drone bee type class that extends Bee.
  * 
@@ -27,7 +29,7 @@ public class Drone extends Bee {
      * @param inputHiveId Integer, hiveId to set on bee
      * @param inputSpecies BeeSpecies, species to set on bee
      */
-    public Drone(int inputId, int inputHiveId, BeeSpeciesF inputSpecies) {
+    public Drone(int inputId, int inputHiveId, BeeSpecies inputSpecies) {
         // Set bee information
         this.id = inputId;
         this.beeHiveId = inputHiveId;
@@ -40,20 +42,20 @@ public class Drone extends Bee {
         int bonusStamina = 0;
         
         // Set bonus based on species
-        if (species == BeeSpeciesF.Killer) {
+        if (species == BeeSpecies.Killer) {
             bonusAttack = BONUS_ATTACK;
             bonusStamina = -BONUS_STAMINA;
-        } else if (species == BeeSpeciesF.Carpenter) {
+        } else if (species == BeeSpecies.Carpenter) {
             bonusHealth = -BONUS_HEALTH;
             bonusStamina = BONUS_STAMINA;
-        } else if (species == BeeSpeciesF.Bumble) {
+        } else if (species == BeeSpecies.Bumble) {
             bonusAttack = -BONUS_ATTACK;
             bonusHealth = BONUS_HEALTH;
-        } else if (species == BeeSpeciesF.Tiny) {
+        } else if (species == BeeSpecies.Tiny) {
             bonusAttack = -BONUS_ATTACK;
             bonusHealth = -BONUS_HEALTH;
             bonusStamina = -BONUS_STAMINA;
-        } else if (species == BeeSpeciesF.Super) {
+        } else if (species == BeeSpecies.Super) {
             bonusAttack = BONUS_ATTACK;
             bonusHealth = BONUS_HEALTH;
             bonusStamina = BONUS_STAMINA;

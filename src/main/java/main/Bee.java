@@ -1,20 +1,22 @@
 package main.java.main;
 
+import main.java.main.BeeHive.BeeSpecies;
+
 public abstract class Bee {
     
     public static enum BeeState {
         Nothing, Search, Forage, Rest, Attack, Return, Lay, Hatch, Build;
     }
     
-    public static enum BeeSpeciesF {
-        Honey, Killer, Carpenter, Bumble, Tiny, Super;
-    }
+    //public static enum BeeSpecies {
+    //    Honey, Killer, Carpenter, Bumble, Tiny, Super;
+    //}
     
     // Bee Information
     protected int id;
     protected int beeHiveId;
     protected BeeState currentState;
-    protected BeeSpeciesF species;
+    protected BeeSpecies species;
     
     // Bee Stats
     protected int attack;
@@ -64,7 +66,7 @@ public abstract class Bee {
      * 
      * @return
      */
-    public BeeSpeciesF getSpecies() {
+    public BeeSpecies getSpecies() {
         return this.species;
     }
     
@@ -143,7 +145,7 @@ public abstract class Bee {
         // Create string buffer
         StringBuffer outBuffer =  new StringBuffer();
         
-        // Append BeeHive info to buffer
+        // Append Bee info to buffer
         outBuffer.append("Bee id: " + id + "\n");
         outBuffer.append("BeeHive id: " + beeHiveId + "\n");
         outBuffer.append("Species: " + species + "\n");
@@ -151,6 +153,24 @@ public abstract class Bee {
         outBuffer.append("Attack: " + attack + "\n");
         outBuffer.append("Health: " + health + "/" + healthMax + "\n");
         outBuffer.append("Stamina: " + stamina + "/" + staminaMax);
+        
+        // Set buffer to output String
+        String output = outBuffer.toString();
+        
+        return output;
+    }
+    
+    /**
+     * Method to output simple string of bee info.
+     * 
+     * @return String
+     */
+    public String toStringId() {
+        // Create string buffer
+        StringBuffer outBuffer =  new StringBuffer();
+        
+        // Append Bee info to buffer
+        outBuffer.append(this.getType() + " Bee id: " + id + " hive id: " + beeHiveId);
         
         // Set buffer to output String
         String output = outBuffer.toString();

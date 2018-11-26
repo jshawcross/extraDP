@@ -9,10 +9,10 @@ import main.java.main.BeeHive.BeeHiveBuilder;
 import main.java.main.BeeHive.BeeSpecies;
 
 public class Controller {
-    public static Apiary beeApiary = Apiary.getInstance("default");
-    public static Vector<Bee> bees = new Vector<Bee>();
-    public static int hiveIdCount = 1;
-    public static int beeIdCount = 1;
+    private static Apiary beeApiary = Apiary.getInstance("default");
+    private static Vector<Bee> bees = new Vector<Bee>();
+    private static int hiveIdCount = 1;
+    private static int beeIdCount = 1;
     
     /**
      * Main method.
@@ -21,7 +21,7 @@ public class Controller {
      */
     public static void main(String[] args) {
         boolean end = false;
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in, "UTF-8");
         String command;
         
         // to do: add naming apiary
@@ -77,7 +77,7 @@ public class Controller {
     /**
      * Method for spawn command.
      * 
-     * @param input String[] string from command line
+     * @param input String[] parsed string from command line
      */
     public static void spawn(String[] input) {
         boolean created = true;
@@ -108,13 +108,21 @@ public class Controller {
                     created = false;
                 }
                 
-                // If hive true, create hive and add to apiary
                 if (created) {
+                    // create hive and add to apiary
                     BeeHive newHive = newHiveBuilder.build();
                     beeApiary.addBeeHive(newHive);
-                    System.out.println("Created " + input[3] + " bee hive at " 
+                    System.out.println("Spawned " + input[3] + " bee hive at " 
                                 + input[1] + "," + input[2] + " with id: " + hiveIdCount);
+                    
+                    // create queen bee for hive
+                    Bee newBee = BeeFactory.getBee("Queen", beeIdCount, hiveIdCount, 
+                            beeApiary.getBeeHive(hiveIdCount).getSpecies());
+                    bees.add(newBee);
+                    
+                    // iterate hive id and bee id number
                     hiveIdCount++;
+                    beeIdCount++;
                 } else {
                     System.out.println("invalid bee type, valid types:");
                     System.out.println("honey, killer, carpenter, bumble, super, tiny");
@@ -127,20 +135,147 @@ public class Controller {
         }
     }
     
+    /**
+     * Method for give command.
+     * 
+     * @param input String[] parsed string from command line
+     */
     public static void give(String[] input) {
-        
+        // Check for valid parameter amount
+        if (input.length != 4) {
+            System.out.println("invalid parameters for 'give' command, please use:");
+            System.out.println("give <hive id> <resource> <amount>");
+        } else {
+            try {
+                // Check if bee hive with this id exists
+                if (beeApiary.getBeeHive(Integer.parseInt(input[1])) == null) {
+                    System.out.println("No bee hive exists with that id");
+                } else {
+                    if (input[2].equals("worker")) {
+                        for (int i = 1; i <= Integer.parseInt(input[3]); i++) {
+                            Bee newBee = BeeFactory.getBee("Worker", beeIdCount, 
+                                    Integer.parseInt(input[1]), 
+                                    beeApiary.getBeeHive(Integer.parseInt(input[1])).getSpecies());
+                            bees.addElement(newBee);
+                            beeIdCount++;
+                        }
+                        System.out.println("Spawned " + Integer.parseInt(input[3])
+                                + " worker bees for hive id: " + Integer.parseInt(input[1]));
+                    } else if (input[2].equals("warrior")) {
+                        for (int i = 1; i <= Integer.parseInt(input[3]); i++) {
+                            Bee newBee = BeeFactory.getBee("Warrior", beeIdCount, 
+                                    Integer.parseInt(input[1]), 
+                                    beeApiary.getBeeHive(Integer.parseInt(input[1])).getSpecies());
+                            bees.addElement(newBee);
+                            beeIdCount++;
+                        }
+                        System.out.println("Spawned " + Integer.parseInt(input[3])
+                                + " warrior bees for hive id: " + Integer.parseInt(input[1]));
+                    } else if (input[2].equals("drone")) {
+                        for (int i = 1; i <= Integer.parseInt(input[3]); i++) {
+                            Bee newBee = BeeFactory.getBee("Drone", beeIdCount, 
+                                    Integer.parseInt(input[1]), 
+                                    beeApiary.getBeeHive(Integer.parseInt(input[1])).getSpecies());
+                            bees.addElement(newBee);
+                            beeIdCount++;
+                        }
+                        System.out.println("Spawned " + Integer.parseInt(input[3])
+                                + " drone bees for hive id: " + Integer.parseInt(input[1]));
+                    } else if (input[2].equals("food")) {
+                        beeApiary.getBeeHive(Integer.parseInt(input[1]))
+                                .giveFood(Integer.parseInt(input[3]));
+                        System.out.println("Gave hive id: " + Integer.parseInt(input[1]) + " "
+                                + Integer.parseInt(input[3]) + " food");
+                    } else if (input[2].equals("egg")) {
+                        beeApiary.getBeeHive(Integer.parseInt(input[1]))
+                                .giveEggs(Integer.parseInt(input[3]));
+                        System.out.println("Gave hive id: " + Integer.parseInt(input[1]) + " "
+                                + Integer.parseInt(input[3]) + " eggs");
+                    } else {
+                        System.out.println("invalid item to give to bee hive, valid items:");
+                        System.out.println("worker, warrior, drone, food, egg");
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("invalid parameters for 'give' command, please use:");
+                System.out.println("give <hive id> <resource> <amount>");
+            }
+        }
     }
 
+    /**
+     * Method for summary command.
+     * 
+     * @param input String[] parsed string from command line
+     */
     public static void summary(String[] input) {
-           
+        // Check for valid parameter amount
+        if (input.length != 3) {
+            System.out.println("invalid parameters for 'summary' command, please use:");
+            System.out.println("summary <hive> <hive id> or summary <bees> <bee id>");
+        } else {
+            // Try block to catch if integer not used for id number
+            try {
+                if (input[1].equals("hive")) {
+                    // Check if bee hive exists with this id or not
+                    if (beeApiary.getBeeHive(Integer.parseInt(input[2])) == null) {
+                        System.out.println("No bee hive exists with that id");
+                    } else {
+                        System.out.print(beeApiary.getBeeHive(Integer.parseInt(input[2])) + "\n");
+                    }
+                } else if (input[1].equals("bee")) {   
+                    boolean found = false;
+                    
+                    // Loop through vector and look for bee with this id
+                    for (int i = 0; i < bees.size(); i++) {
+                        // Check if id matches bee at current index
+                        if (bees.elementAt(i).getId() == Integer.parseInt(input[2])) {
+                            System.out.println(bees.elementAt(i));
+                            found = true;
+                        }
+                    }
+
+                    // Check if a bee was found with this id
+                    if (!found) {
+                        System.out.println("No bee exists with that id");
+                    }
+                } else {
+                    System.out.println("invalid parameters for 'summary' command, please use:");
+                    System.out.println("list <hives> or list <bees>");
+                }
+            } catch (Exception ex) {
+                System.out.println("einvalid parameters for 'summary' command, please use:");
+                System.out.println("summary <hive> <hive id> or summary <bees> <bee id>");
+            }
+        }
     }
     
-    public static void bee(String[] input) {
-        
-    }
-
+    /**
+     * Method for list command.
+     * 
+     * @param input String[] parsed string from command line
+     */
     public static void list(String[] input) {
-        System.out.println("Bee hives:");
-        System.out.println(beeApiary.hiveList());
-    }
+        // Check for valid parameter amount
+        if (input.length != 2) {
+            System.out.println("invalid parameters for 'list' command, please use:");
+            System.out.println("list <hives> or list <bees>");
+        } else {
+            // If hive output hives, if bees output bees
+            if (input[1].equals("hives")) {
+                System.out.println("Bee hives:");
+                System.out.print(beeApiary.hiveList());
+            } else if (input[1].equals("bees")) {
+                System.out.println("Bees:");
+                
+                // Loop through vector and output each bee
+                for (int i = 0; i < bees.size(); i++) {
+                    System.out.println(bees.elementAt(i).toStringId());
+                }
+            } else {
+                System.out.println("invalid parameters for 'list' command, please use:");
+                System.out.println("list <hives> or list <bees>");
+            }
+        }     
+    } 
 }

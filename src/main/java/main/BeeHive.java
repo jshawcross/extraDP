@@ -1,13 +1,13 @@
 package main.java.main;
 
+/**
+ * BeeHive class to store imformation about a BeeHive object.
+ * 
+ * @author Jason Shawcross
+ *
+ */
 public class BeeHive {
     
-    /**
-     * BeeHive class to store imformation about a BeeHive object.
-     * 
-     * @author Jason Shawcross
-     *
-     */
     public static enum BeeSpecies {
         Honey, Killer, Carpenter, Bumble, Tiny, Super;
     }
@@ -162,6 +162,24 @@ public class BeeHive {
      */
     public int getRestModifier() {
         return restModifier;
+    }
+    
+    /**
+     * Method to add food to hive.
+     * 
+     * @param input Integer, food to add
+     */
+    public void giveFood(int input) {
+        foodAmount = foodAmount + input;
+    }
+    
+    /**
+     * Method to add eggs to hive.
+     * 
+     * @param input Integer, eggs to add
+     */
+    public void giveEggs(int input) {
+        eggAmount = eggAmount + input;
     }
     
     /** 
